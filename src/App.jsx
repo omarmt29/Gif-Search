@@ -3,25 +3,27 @@ import './App.css';
 import { FaSistrix } from 'react-icons/fa6';
 
 function App() {
-  const apiKey = 'TY39wwx8rSxfwvsKu3Y5XmatKIsSrTAV';
-  const Url = 'https://api.giphy.com/v1/gifs/search';
+  const apiKey = import.meta.env.VITE_API_KEY;
+  const Url = import.meta.env.VITE_API_URL;
+
   const [gifs, setGifs] = useState([]);
   const [gifData, setGifData] = useState({ url: Url, apiKey: apiKey, query: 'gatitos', limit: 3 });
 
   const handleFetchGifs = async (query, limit) => {
+   
     try {
-      const response = await fetch(`${Url}?api_key=${apiKey}&q=${query}&limit=${limit}`);
-      const data = await response.json();
-      setGifs(data.data);
+      const res = await fetch(`${Url}?api_key=${apiKey}&q=${query}&limit=${limit}`)
+      const {data} = await res.json();
+      setGifs(data)
     } catch (error) {
-      console.error('Error fetching gifs:', error);
+      console.log(error);
     }
   };
 
   useEffect(() => {
     handleFetchGifs(gifData.query, gifData.limit);
   }, [gifData.query, gifData.limit]);
-5
+ 
   return (
     <div>
       <div className='m-auto flex w-56 gap-2 fixed top-0 mt-2'>
